@@ -1,9 +1,5 @@
-import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.Stroke;
 import java.awt.event.ActionEvent;
-
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -20,42 +16,39 @@ public class Game extends JFrame {
 	private char userTurn; // users turn , only one letter, tracks whether it is a X or O 
 	private int count; // keeps track of user moves
 	private final JFrame frame; // our JFrame
-	@SuppressWarnings("unused")
-	private int number;
+
 
 	// constructor 
 	// want to initialize the variable 
 	// here we are stating the board size
 	// userTurn starts off at X
-
 	public Game(final JFrame frame) throws BoardErrorException{ // Game takes in the JFrame 
 
-		this.frame = frame;
+		this.frame = frame; // Initializing frame 
 		count = 0; // number of turns starts at 0;
-		number = 0;
-
+		
 		setUserTurn('X'); // first turn will always be X
-		setTemplateOfBoard(new char[GUI.sizeOfBoard]); // size of the board we are going to make it 
-	    
+		setTemplateOfBoard(new char[GUI.getSizeofboard()]); // size of the board we are going to make it 
+
 
 		try{
-		for(int spaces=0; spaces<GUI.sizeOfBoard; spaces++){ // size of Board is in the GUI class
+			for(int spaces=0; spaces<GUI.getSizeofboard(); spaces++){ // size of Board is in the GUI class
 
-			getTemplateOfBoard()[spaces] = ' '; // the board is being created, looping through all rows and col
+				getTemplateOfBoard()[spaces] = ' '; // the board is being created, looping through all rows and col
 
-			//every index of the board not has a char value equal to a space 
+				//every index of the board not has a char value equal to a space 
 
-			//determine if everything came out correctly 
-			//should equal of a total of 9
-			// 3x3
+				//determine if everything came out correctly 
+				//should equal of a total of 9
+				// 3x3
+			}
+			System.out.println("Board template created"); // means the board now has all spaces 
 		}
-		System.out.println("Board template created"); // means the board now has all spaces 
-	}
 		catch(Exception e){
 			System.out.println("Could not initalize the board to empty char");
 			e.printStackTrace();
 		}
-		
+
 	}
 
 	public Game userMove(int moveMade) throws UserMoveErrorExcepion {
@@ -68,7 +61,7 @@ public class Game extends JFrame {
 		//boolean statement to determine the turns 
 		// So user X starts first
 		//if the turn is X, the nextTurn is now O,
-	
+
 		if(getUserTurn() == 'X'){
 			setUserTurn('O');	
 		}
@@ -77,7 +70,7 @@ public class Game extends JFrame {
 		}
 
 		count++; 
-		
+
 		return this; // going to return the userTurn
 		// issue actually entering the userTurn is not giving right value, but using 'this' does 
 	}
@@ -87,9 +80,7 @@ public class Game extends JFrame {
 	//saw online to override it like this 
 	// will make the board out of emepty strings 
 	// going to return a string representation of an object 
-	public String toString(){
-		return new String(getTemplateOfBoard());
-	}
+
 
 	public void mouseListener(ActionEvent e, int moveMade) throws ButtonsNotMadeException,ButtonCanNotBeClickedException, WinnerErrorException{ 
 		// mouse click events 
@@ -101,7 +92,8 @@ public class Game extends JFrame {
 				UIManager.getDefaults().put("Button.disabledText",Color.RED); // when the but gets disabled the test will turn red 		
 			}
 			else{
-				UIManager.getDefaults().put("Button.disabledText",Color.BLUE);
+				UIManager.getDefaults().put("Button.disabledText",Color.BLUE); // users turn blue 
+				 // when the but gets disabled the test will turn blue 
 			}
 			//calling the method userTurn to determine who goes next
 			//problem is that is expects a String
@@ -139,30 +131,26 @@ public class Game extends JFrame {
 
 		for(int i = 0;i<win.length;i++){	 
 			// looping through the win possibilities 
-			
-	
+
+
 			if(win[i] == 264){ // if one of the the combinations equal 'X','X','X' which equals 264, then there is a winner 
 				System.out.println("X is the winner!!!");	
 				System.out.println("Game Over!");
-				number = i;
-				//draw(); // call draw method 
-		
+
 				try {
-					gameOver("X is the Winner");
+					gameOver("X is the Winner"); // calling gameOver method 
 				} catch (CouldNotPlayAgainException | NoCancelOption e) {
 					e.printStackTrace();
 				}
-				
+
 				return this; // if statement is true, it will return this(gameOver)
 			}
 			else if(win[i] == 237 ){ // if one of the the combinations equal 'O','O','O' which equals 234, then there is a winner 
 				System.out.println("O is the winner!!!");
-				System.out.println("Game Over!");
-				number = i;
-				//draw(); // call draw method 
-				
+				System.out.println("Game Over!"); 
+
 				try {
-					gameOver("O is the Winner");
+					gameOver("O is the Winner"); // calling gameOver method 
 				} catch (CouldNotPlayAgainException | NoCancelOption e) {
 					e.printStackTrace();
 				} // if statement is true, it will return this(gameOver)
@@ -173,11 +161,11 @@ public class Game extends JFrame {
 		} 
 
 		//
-		if (count == 9) {
+		if (count == 9) { // 9 switches 
 			// if none of the statements above are true, it automatically comes done to here
 			//so if there is nine moves and no win, it is a draw 
 			try {
-				gameOver("Draw");
+				gameOver("Draw"); //gameOver method 
 			} catch (CouldNotPlayAgainException | NoCancelOption e) {
 				e.printStackTrace();
 			}
@@ -189,7 +177,7 @@ public class Game extends JFrame {
 	} 
 
 	private void gameOver(String message) throws BoardErrorException, ButtonsNotMadeException, ButtonCanNotBeClickedException, 
-	                                             WinnerErrorException, CouldNotPlayAgainException,NoCancelOption{
+	WinnerErrorException, CouldNotPlayAgainException,NoCancelOption{
 
 		JOptionPane.showMessageDialog(null, message, "Game Over", JOptionPane.YES_NO_OPTION); // gives a popup window at the end of the game 
 
@@ -203,10 +191,10 @@ public class Game extends JFrame {
 			GUI.playAgain(); // play the game again
 
 		}
-	    if(playAgain == JOptionPane.CANCEL_OPTION){
+		if(playAgain == JOptionPane.CANCEL_OPTION){
 			secondPlayAgin(); // give user second chance 
 		}	
-		
+
 	}
 
 	private void secondPlayAgin() throws CouldNotPlayAgainException,NoCancelOption {
@@ -221,67 +209,35 @@ public class Game extends JFrame {
 		}
 		else if(secondChoice == JOptionPane.CANCEL_OPTION){
 			JOptionPane.showMessageDialog(null, "You are entering View Mode Only", "View Only Mode", JOptionPane.YES_NO_OPTION);
-			
-			//disabling all JButton until new game is started 
-		 try{			 
-			for(int i=0;i<9;i++){
 
-				 GUI.clickButton[i].setEnabled(false);
-				//System.out.println("Buttons Disabled");
+			//disabling all JButton until new game is started 
+			try{			 
+				for(int i=0;i<9;i++){
+
+					GUI.getClickButton()[i].setEnabled(false);
+					//System.out.println("Buttons Disabled");
+				}
+				System.out.println("VIEW MODE ONLY");
 			}
-			System.out.println("VIEW MODE ONLY");
-		 }
-		 catch(Exception e){
-			 System.out.println("Could not disable the button");
-			 e.printStackTrace();
-		 }
+			catch(Exception e){
+				System.out.println("Could not disable the button");
+				e.printStackTrace();
+			}
 		}
 	}
-	
-	 
-	/*private void draw(){	// drawing a line at winning location 
 
-		
-		Graphics2D  g1 = (Graphics2D) GUI.getFrame().getGraphics(); // declaring graphics on our Jframe 
-		Stroke stroke3 = new BasicStroke(12f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_MITER); // make our strokes cap off round 
-		
-		if(number == 0){ // statements will determine the win location, so at win0, XXX, 
-		    g1.setStroke(stroke3); // we will add stroke to our line 
-			g1.drawLine(0,104,500,104); // draw the line starting at the 0,104 and end it at coordinates 500,104 
-		}
-		else if(number == 1){
-		    g1.setStroke(stroke3);
-			g1.drawLine(0,257,500,257);
-		}
-		else if(number == 2){
-			g1.setStroke(stroke3);
-			g1.drawLine(0,411,500,411);	
-		}
-		else if(number == 3){
-			g1.setStroke(stroke3);
-			g1.drawLine(88,0,88,500);	
-		}
-		else if(number == 4){
-			g1.setStroke(stroke3);
-			g1.drawLine(250,0,250,500);
-		}
-		else if(number == 5){
-			g1.setStroke(stroke3);
-			g1.drawLine(411,0,411,500);
-		}
-		else if(number == 6){
-			g1.setStroke(stroke3);
-			g1.drawLine(-22,0,500,500);
-			
-		}
-		else if(number == 7){
-			g1.setStroke(stroke3);
-			g1.drawLine(520,0,0,500);
-		}
-	}*/
-	
-    // want to be able to access the private variables 
+
+	//---------------------------------------------------------
+
+	//getter and setter 
+
+	// want to be able to access the private variables 
 	//so we will make getter and setter methods for the ones that we need
+
+	public String toString(){
+		return new String(getTemplateOfBoard());
+	}
+
 	public char getUserTurn() { // getter method for userTurn
 		return userTurn;
 	}
@@ -297,5 +253,5 @@ public class Game extends JFrame {
 	public void setTemplateOfBoard(char[] templateOfBoard) { // setter method 
 		this.templateOfBoard = templateOfBoard;
 	}
-
+	
 }

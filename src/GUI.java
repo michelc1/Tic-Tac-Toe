@@ -13,6 +13,7 @@ import javax.swing.ButtonModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
@@ -26,11 +27,11 @@ public class GUI implements Runnable {
 
 	private final static int row = 3; // our rows 
 	private final static int col = 3; // our col 
-    final static int sizeOfBoard = row * col; 
-	// the size of our board is not going to change so we make it final
 	private final Game choice; //instance of Game 
 	private static JFrame frame; 
-	static JButton[] clickButton;
+	private final static int sizeOfBoard = row * col; 
+	// the size of our board is not going to change so we make it final
+	private static JButton[] clickButton;
 
 
 	/**
@@ -39,17 +40,17 @@ public class GUI implements Runnable {
 	private static final long serialVersionUID = 1L;
 
 
-	public GUI() throws BoardErrorException {
+	public GUI() throws BoardErrorException { //constructor initializing values 
 
-		GUI.frame = new JFrame("TicTacToe GAME");  
-		this.choice = new Game(getFrame());
-		clickButton = new JButton[9];
+		GUI.frame = new JFrame("TicTacToe GAME");   // initializing the JFrame 
+		this.choice = new Game(getFrame());  
+		setClickButton(new JButton[9]); //9 different JButton 
 	}
 
 	public static void main(String[] args){
 
 		try{
-			SwingUtilities.invokeLater(new GUI()); // run 
+			SwingUtilities.invokeLater(new GUI()); // running our class 
 		}
 		catch(Exception e){ // wanted to test to ensure that Runnable could be invoked 
 			System.out.println("Could not excute Runnable application");
@@ -57,7 +58,7 @@ public class GUI implements Runnable {
 		}
 	}
 
-	public void run()  {
+	public void run()  { // overriding the run 
 		try {
 			setup(); // going to run out setup method, what our game is made out of 
 		} catch (BoardErrorException e) {
@@ -77,8 +78,9 @@ public class GUI implements Runnable {
 		//the dimensations of the board = sizeOfBoard
 
 		getFrame().setLayout(new GridLayout(row, col)); // this is the outline rows * col 
-	     // sizes out row * col based on what we define those numbers as
+		// sizes out row * col based on what we define those numbers as
 		//i.e 3x3
+		//glass.setLayout(new GridLayout(row, col));
 
 		getFrame().setBounds(0,0,500,500); // location at 0,0, size 500 x 500 
 		Border border = new LineBorder(Color.DARK_GRAY, 2); // color of JButton border 
@@ -93,52 +95,55 @@ public class GUI implements Runnable {
 		catch(Exception e){
 			System.out.println("Board was not displayed");
 		}
-	
+
 		// 9 different buttons, for every index there will be a button 
-		for(int i =0; i<sizeOfBoard;i++){ // going to fill the board with clickableButtons by looping through every index and placing a button there 
-		final int move = i;
+		for(int i =0; i<getSizeofboard();i++){ // going to fill the board with clickableButtons by looping through every index and placing a button there 
+			final int move = i; // want to create a variable equal to i, so we can use it our overridden method below
+			//since it has to take final 
 
-			clickButton[i] = new JButton(); // at a certain index there is a new button 
-			clickButton[i].setSize(250,250); // size of each button 
-			clickButton[i].setBackground(Color.WHITE); // color of the JButton 
-		
-			getFrame().add(clickButton[i]); // we are going to add the actual the button at that index on the frame 
+			getClickButton()[i] = new JButton(); // at a certain index there is a new button 
+			getClickButton()[i].setSize(250,250); // size of each button 
+			getClickButton()[i].setBackground(Color.WHITE); // color of the JButton 
 
-			clickButton[i].setFont(new Font("Arial", Font.BOLD, 70)); // size of the text 
-			clickButton[i].setBorder(border); // adding border 
+			getFrame().add(getClickButton()[i]); // we are going to add the actual the button at that index on the frame 
 
-			clickButton[i].getModel().addChangeListener(new ChangeListener() { //going to overRide what happens when we rollover and press a Butotn 
+			getClickButton()[i].setFont(new Font("Arial", Font.BOLD, 70)); // size of the text 
+			getClickButton()[i].setBorder(border); // adding border 
+
+			getClickButton()[i].getModel().addChangeListener(new ChangeListener() { //going to overRide what happens when we rollover and press a Butotn 
 
 				public void stateChanged(ChangeEvent e) {
 					ButtonModel button = (ButtonModel) e.getSource(); // manages the state of the button, i.e lets me control what happens to the button 
 
-				  if(clickButton[move] != null){ // if we do not include this argument 
-					  // the buttons are not made yet on the new game, meaning clickButton[i] = null
-					  //so boolean(!button.isRollover()) will return true, since on the new game you can not have your mouse hovered over 
-					  // but when it returns true, it will return a null value, giving a null pointer exception 
-					  // so best thing to do, is to only run these cases below when the buttons are not null
-					  
-					if (button.isRollover()) { // when the mouse hovers over the index 
-						clickButton[move].setBackground(Color.BLACK); // color will equal black 
+					if(getClickButton()[move] != null){ // if we do not include this argument 
+						// the buttons are not made yet on the new game, meaning clickButton[i] = null
+						//so boolean(!button.isRollover()) will return true, since on the new game you can not have your mouse hovered over 
+						// but when it returns true, it will return a null value, giving a null pointer exception 
+						// so best thing to do, is to only run these cases below when the buttons are not null
+
+						if (button.isRollover()) { // when the mouse hovers over the index 
+							getClickButton()[move].setBackground(Color.BLACK); // color will equal black 
+						}
+						else if(!button.isRollover()){ // when the button is not hovered over
+							getClickButton()[move].setBackground(Color.WHITE); // color will be whte, just like our background 
+						}
+
 					}
-					else if(!button.isRollover()){ // when the button is not hovered over
-						 clickButton[move].setBackground(Color.WHITE); // color will be whte, just like our background 
-					}
-					
-				}
 				}
 			});
 
 
-			clickButton[i].addActionListener(new ActionListener() { 
+			getClickButton()[i].addActionListener(new ActionListener() { // what happens during clicks 
 
 				//our click events, going to override to let it know what we want to happen
 				//once we click on the button
 				public void actionPerformed(ActionEvent e) {
 					try {
 
-						  clickButton[move].setEnabled(false); //going to disable the button after it is clicked 
+
+						getClickButton()[move].setEnabled(false); //going to disable the button after it is clicked 
 						//ORDER: button gets clicked first, then the test is added
+
 						choice.mouseListener(e, move); // our mouseListenerEvent in game class 
 
 						//
@@ -165,8 +170,24 @@ public class GUI implements Runnable {
 		}
 	}
 
+	// --------------------------------------------------------
+
+	// getter and setter 
+
 	public static JFrame getFrame() {
 		return frame;
+	}
+
+	public static int getSizeofboard() {
+		return sizeOfBoard;
+	}
+
+	public static JButton[] getClickButton() {
+		return clickButton;
+	}
+
+	public static void setClickButton(JButton[] clickButton) {
+		GUI.clickButton = clickButton;
 	}
 
 }
