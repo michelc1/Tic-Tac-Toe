@@ -1,19 +1,27 @@
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Stroke;
 import java.awt.event.ActionEvent;
+
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 
 
-public class Game {
+public class Game extends JFrame {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private char[] templateOfBoard; // our board, TicTacToe field, static
 	private char userTurn; // users turn , only one letter, tracks whether it is a X or O 
 	private int count; // keeps track of user moves
-	final JFrame frame; // our JFrame
+	private final JFrame frame; // our JFrame
+	@SuppressWarnings("unused")
+	private int number;
 
 	// constructor 
 	// want to initialize the variable 
@@ -24,9 +32,11 @@ public class Game {
 
 		this.frame = frame;
 		count = 0; // number of turns starts at 0;
+		number = 0;
 
 		setUserTurn('X'); // first turn will always be X
 		setTemplateOfBoard(new char[GUI.sizeOfBoard]); // size of the board we are going to make it 
+	    
 
 		try{
 		for(int spaces=0; spaces<GUI.sizeOfBoard; spaces++){ // size of Board is in the GUI class
@@ -129,11 +139,13 @@ public class Game {
 
 		for(int i = 0;i<win.length;i++){	 
 			// looping through the win possibilities 
+			
 	
 			if(win[i] == 264){ // if one of the the combinations equal 'X','X','X' which equals 264, then there is a winner 
 				System.out.println("X is the winner!!!");	
 				System.out.println("Game Over!");
-				draw(i);
+				number = i;
+				//draw(); // call draw method 
 		
 				try {
 					gameOver("X is the Winner");
@@ -146,7 +158,8 @@ public class Game {
 			else if(win[i] == 237 ){ // if one of the the combinations equal 'O','O','O' which equals 234, then there is a winner 
 				System.out.println("O is the winner!!!");
 				System.out.println("Game Over!");
-				draw(i);
+				number = i;
+				//draw(); // call draw method 
 				
 				try {
 					gameOver("O is the Winner");
@@ -225,43 +238,47 @@ public class Game {
 		}
 	}
 	
-	private void draw(int win){
+	 
+	/*private void draw(){	// drawing a line at winning location 
 
-		Graphics2D g1 = (Graphics2D) frame.getGraphics();
-		if(win == 0){
-			g1.setStroke(new BasicStroke(8));
-			g1.drawLine(0,104,500,104);
+		
+		Graphics2D  g1 = (Graphics2D) GUI.getFrame().getGraphics(); // declaring graphics on our Jframe 
+		Stroke stroke3 = new BasicStroke(12f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_MITER); // make our strokes cap off round 
+		
+		if(number == 0){ // statements will determine the win location, so at win0, XXX, 
+		    g1.setStroke(stroke3); // we will add stroke to our line 
+			g1.drawLine(0,104,500,104); // draw the line starting at the 0,104 and end it at coordinates 500,104 
 		}
-		else if(win == 1){
-			g1.setStroke(new BasicStroke(8));
+		else if(number == 1){
+		    g1.setStroke(stroke3);
 			g1.drawLine(0,257,500,257);
 		}
-		else if(win == 2){
-			g1.setStroke(new BasicStroke(8));
+		else if(number == 2){
+			g1.setStroke(stroke3);
 			g1.drawLine(0,411,500,411);	
 		}
-		else if(win == 3){
-			g1.setStroke(new BasicStroke(8));
+		else if(number == 3){
+			g1.setStroke(stroke3);
 			g1.drawLine(88,0,88,500);	
 		}
-		else if(win == 4){
-			g1.setStroke(new BasicStroke(8));
+		else if(number == 4){
+			g1.setStroke(stroke3);
 			g1.drawLine(250,0,250,500);
 		}
-		else if(win == 5){
-			g1.setStroke(new BasicStroke(8));
+		else if(number == 5){
+			g1.setStroke(stroke3);
 			g1.drawLine(411,0,411,500);
 		}
-		else if(win == 6){
-			g1.setStroke(new BasicStroke(8));
+		else if(number == 6){
+			g1.setStroke(stroke3);
 			g1.drawLine(-22,0,500,500);
 			
 		}
-		else if(win == 7){
-			g1.setStroke(new BasicStroke(8));
+		else if(number == 7){
+			g1.setStroke(stroke3);
 			g1.drawLine(520,0,0,500);
 		}
-	}
+	}*/
 	
     // want to be able to access the private variables 
 	//so we will make getter and setter methods for the ones that we need

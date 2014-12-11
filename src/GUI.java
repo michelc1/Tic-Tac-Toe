@@ -28,8 +28,8 @@ public class GUI implements Runnable {
 	private final static int col = 3; // our col 
     final static int sizeOfBoard = row * col; 
 	// the size of our board is not going to change so we make it final
-	final Game choice; //instance of Game 
-	private final JFrame frame; 
+	private final Game choice; //instance of Game 
+	private static JFrame frame; 
 	static JButton[] clickButton;
 
 
@@ -41,8 +41,8 @@ public class GUI implements Runnable {
 
 	public GUI() throws BoardErrorException {
 
-		this.frame = new JFrame("TicTacToe GAME");  
-		this.choice = new Game(frame);
+		GUI.frame = new JFrame("TicTacToe GAME");  
+		this.choice = new Game(getFrame());
 		clickButton = new JButton[9];
 	}
 
@@ -71,22 +71,22 @@ public class GUI implements Runnable {
 		// and a 3x3 frame 
 
 
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // when the user closes the window JFrame  will exit 
+		getFrame().setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // when the user closes the window JFrame  will exit 
 
 		//going to design the board now 
 		//the dimensations of the board = sizeOfBoard
 
-		frame.setLayout(new GridLayout(row, col)); // this is the outline rows * col 
+		getFrame().setLayout(new GridLayout(row, col)); // this is the outline rows * col 
 	     // sizes out row * col based on what we define those numbers as
 		//i.e 3x3
 
-		frame.setBounds(0,0,500,500); // location at 0,0, size 500 x 500 
+		getFrame().setBounds(0,0,500,500); // location at 0,0, size 500 x 500 
 		Border border = new LineBorder(Color.DARK_GRAY, 2); // color of JButton border 
 
 		System.out.println("Your board game is being created!");
 
 		try{
-			frame.setVisible(true); // shows the board, 
+			getFrame().setVisible(true); // shows the board, 
 			// this is going to display everything to the screen 
 			System.out.println("Board is now visable");
 		}
@@ -102,7 +102,7 @@ public class GUI implements Runnable {
 			clickButton[i].setSize(250,250); // size of each button 
 			clickButton[i].setBackground(Color.WHITE); // color of the JButton 
 		
-			frame.add(clickButton[i]); // we are going to add the actual the button at that index on the frame 
+			getFrame().add(clickButton[i]); // we are going to add the actual the button at that index on the frame 
 
 			clickButton[i].setFont(new Font("Arial", Font.BOLD, 70)); // size of the text 
 			clickButton[i].setBorder(border); // adding border 
@@ -137,7 +137,7 @@ public class GUI implements Runnable {
 				public void actionPerformed(ActionEvent e) {
 					try {
 
-						 clickButton[move].setEnabled(false); //going to disable the button after it is clicked 
+						  clickButton[move].setEnabled(false); //going to disable the button after it is clicked 
 						//ORDER: button gets clicked first, then the test is added
 						choice.mouseListener(e, move); // our mouseListenerEvent in game class 
 
@@ -163,6 +163,10 @@ public class GUI implements Runnable {
 			System.out.println("Could not excute Runnable application");
 			e.printStackTrace();
 		}
+	}
+
+	public static JFrame getFrame() {
+		return frame;
 	}
 
 }

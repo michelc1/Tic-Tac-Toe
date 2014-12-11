@@ -49,8 +49,9 @@ public class GameTicTacTest {
 	public void testWinner() throws WinnerErrorException, BoardErrorException, ButtonsNotMadeException, ButtonCanNotBeClickedException{ // testing to ensure there can be a winner
 
 		JFrame frame = new JFrame("TicTacToe GAME");
-		Game choice = new Game(frame); //object of the Game board 
+		Game choice = new Game(frame); //object of the Game board    
 		GUI gui = new GUI();
+		GUI.getFrame().setVisible(true);
 
 		// assertEquals("XXX      ",choice.winner() ); // should return a winner
 		//testing the boardtemplateOfBoard[0] = 'X';
